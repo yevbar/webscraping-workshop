@@ -20,7 +20,7 @@ Though we won't need to know much networking to accomplish the tasks we're aimin
 
 Starting simple, we're going to put together a script that obtains the first paragraph of a Wikipedia article as a TL;DR for some topic. To start out, we're going to install two libraries
 
-<iframe height="400px" width="100%" src="https://repl.it/@yevbar/Web-Scraping-Imports?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" <!--sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals-->"></iframe>
+<iframe height="400px" width="100%" src="https://repl.it/@yevbar/Web-Scraping-Imports?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
 
 <iframe frameborder="0" width="100%" height="500px" src="https://repl.it/@yevbar/Web-Scraping-Imports?lite=true"></iframe>
 
