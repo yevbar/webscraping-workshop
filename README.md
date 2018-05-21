@@ -20,7 +20,7 @@ Though we won't need to know much networking to accomplish the tasks we're aimin
 
 Starting simple, we're going to put together a script that obtains the first paragraph of a Wikipedia article as a TL;DR for some topic. To start out, we're going to install two libraries
 
-[![alt text](images/imports.png)](https://repl.it/@yevbar/Web-Scraping-Imports)
+[![imports](images/imports.png)](https://repl.it/@yevbar/Web-Scraping-Imports)
 
 ```python
 import requests
