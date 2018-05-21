@@ -20,7 +20,10 @@ Though we won't need to know much networking to accomplish the tasks we're aimin
 
 Starting simple, we're going to put together a script that obtains the first paragraph of a Wikipedia article as a TL;DR for some topic. To start out, we're going to install two libraries
 
-[![imports](images/imports.png)](https://repl.it/@yevbar/Web-Scraping-Imports)
+```python
+import requests
+from lxml import html
+```
 
 The `requests` library is what we'll use to handle the making requests and the `html` library is how we'll treat the html as a data structure rather than plain text.
 
@@ -40,8 +43,6 @@ We don't need to stress over the specific tags and such in the paragraph, those 
 
 Now to get working!
 
-[insert screenshot of repl here]
-
 ```python
 import requests
 from lxml import html
@@ -51,8 +52,6 @@ my_session = requests.session()
 
 The first thing we're going to do is initialize a `session` object. While you could simply call the function from that class, it helps with readability and a session is needed for more elaborate web scraping.
 
-[insert screenshot of repl here]
-
 ```python
 import requests
 from lxml import html
@@ -61,4 +60,42 @@ my_session = requests.session()
 page = my_session.get("https://en.wikipedia.org/wiki/Meme")
 ```
 
-Now we've
+We can't do much with the `page` variable since it's a `Response` object but that's why we have the `html` library!
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://en.wikipedia.org/wiki/Meme")
+
+tree = html.fromstring(page.text)
+```
+To get the `xpath` of the paragraph we're looking for, we go the inspect element pane, right click on the specific element, select "copy", and then select "xpath"
+
+![](images/copy_xpath.png)
+
+I got the following statement in my clipboard
+
+```
+/html/body/div[3]/div[3]/div[4]/div/p[1]
+```
+
+To use the `xpath` in our program is nice and simple!
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://en.wikipedia.org/wiki/Meme")
+
+tree = html.fromstring(page.text)
+first_paragraph = tree.xpath("/html/body/div[3]/div[3]/div[4]/div/p[1]")[0].text_content()
+```
+
+The `[0]` after the function call is to get the first (and only) element because `xpath` returns a list of elements that satisfy the given condition and `text_content()` is how you get the `text` of the element.
+
+All that's left to do is print the first paragraph and...
+
+[![imports](images/final_wiki.png)](https://repl.it/@yevbar/Web-Scraping-Complete)
