@@ -154,7 +154,7 @@ So, to approach this, we need to be able to identify a tweet from the html and t
 //li
 ```
 
-The "//" indicate that we are looking for this particular element anywhere in the directory (which happens to be "root" or <html>) but we also need to add in the `p` tag to get the text for the tweet
+The "//" indicate that we are looking for this particular element anywhere in the directory (which happens to be "root" or `<html>`) but we also need to add in the `p` tag to get the text for the tweet
 
 ```
 //li//p
@@ -201,3 +201,9 @@ Putting it into action
 [![twitter-scraper](images/twitter_complete.png)](https://repl.it/@yevbar/Twitter-Scraper)
 
 So, voila, you have successfully hacked around using an API with a web scraper!
+
+In this case, there actually was a Twitter API that we could have used instead but what's really cool is that you can create an API with web scraping!
+
+[![](images/supreme.png)](http://www.supremenewyork.com/)
+
+For this, our target will be Supreme clothing
