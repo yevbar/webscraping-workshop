@@ -142,12 +142,62 @@ tweet = tree.xpath("/html/body/div[2]/div[2]/div/div[4]/div/div/div[2]/div/div[2
 print tweet
 ```
 
-Well, for some reason I'm getting an index out of range error which can only be explained by the xpath not returning anything but... how can this be??
+Well, I'm getting an index out of range error which can only be explained by the xpath not returning anything but... how can this be??
 
-And this goes into why I said "can" earlier, which is that, when Twitter (or many other modern sites) give you a webpage, they don't give you a complete webpage. Whatever's left from the page is either retrieved from another request (e.g. a social media feed) or from some CDN that requires the browser to retrieve content itself. However, in this case, this would only prevent us from obtaining all the tweets on a profile because we can't "scroll down".
+And this goes into why I said "can" earlier, which is that, when Twitter (or many other sites) give you a webpage, they don't give you a complete webpage. Whatever's left from the page is either retrieved from another request (e.g. a feed) or from a CDN that requires the browser to retrieve content itself. However, in this case, this would only prevent us from obtaining all the tweets on a profile because we can't scroll down.
 
 The likely situation at hand is that the browser I'm using renders and fills in some html to result in the above xpath which is different from what the python code obtains. But xpath is very nice because we don't need to describe a certain path but, instead, we can describe a certain collection of nodes or elements.
 
-So, to approach this, we need to be able to identify a tweet from the html and then dig in to get the text from it. Well, that's not very difficult if we look at the specific identifiers in a tweet `<li>`
+So, to approach this, we need to be able to identify a tweet from the html and then dig in to get the text from it. Well, that's not very difficult if we realize that tweets are the only `<li>` elements in the page so, to pluck that out we do the following
 
-![](images/data_item_type.png)
+```
+//li
+```
+
+The "//" indicate that we are looking for this particular element anywhere in the directory (which happens to be "root" or <html>) but we also need to add in the `p` tag to get the text for the tweet
+
+```
+//li//p
+```
+
+Putting this into the code from before
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://twitter.com/yevbar")
+
+tree = html.fromstring(page.text)
+tweet = tree.xpath("//li//p")[0].text_content()
+
+print tweet
+```
+
+Now, when I run, I get my most recent tweet!
+
+![](images/first_tweet.png)
+
+But how can we get more than the first tweet? Well, unless you're unfamiliar to python lists, the answer is simple
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://twitter.com/yevbar")
+
+tree = html.fromstring(page.text)
+tweets = tree.xpath("//li//p")
+
+print "~"
+for tweet in tweets:
+  print tweet.text_content() + "\n~"
+```
+
+Putting it into action
+
+[![twitter-scraper](images/twitter_complete.png)](https://repl.it/@yevbar/Twitter-Scraper)
+
+So, voila, you have successfully hacked around using an API with a web scraper!
