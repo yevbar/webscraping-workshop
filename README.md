@@ -99,3 +99,55 @@ The `[0]` after the function call is to get the first (and only) element because
 All that's left to do is print the first paragraph and...
 
 [![imports](images/final_wiki.png)](https://repl.it/@yevbar/Web-Scraping-Complete)
+
+That was a nice project with web scraping, now we're going to use web scraping as an alternative to using an API to grab a handful of Tweets from Twitter
+
+For this, I'll be using my Twitter profile (for shameless advertising)
+
+[![twitter](images/twitter.png)](https://twitter.com/yevbar)
+
+We can go ahead and prepare the libraries we need
+
+```python
+import requests
+from lxml import html
+```
+
+As before, we need to look around in the html to find whatever we're scraping for and a right click on one of the tweets will reveal that each tweet is in an `<li>` tag
+
+![](images/li.png)
+
+So to get every tweet we can off of this page (I'll explain why I say _can_ shortly), we need to first find the `xpath` for this tweet. Some more digging will show that the text of the tweet is in a `<p>` tag
+
+![](images/p_tag_twitter.png)
+
+Copying the 'xpath' gives me the following in my clipboard
+
+```
+/html/body/div[2]/div[2]/div/div[4]/div/div/div[2]/div/div[2]/div[4]/div/div[2]/ol[1]/li[1]/div[1]/div[2]/div[2]/p
+```
+
+Before we try to expand to multiple tweets, let's make sure that the text from this tweet works and, to do that, we're going to use the code from the Wikipedia scraper but replace the url and xpath to get
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://twitter.com/yevbar")
+
+tree = html.fromstring(page.text)
+tweet = tree.xpath("/html/body/div[2]/div[2]/div/div[4]/div/div/div[2]/div/div[2]/div[4]/div/div[2]/ol[1]/li[1]/div[1]/div[2]/div[2]/p")[0].text_content()
+
+print tweet
+```
+
+Well, for some reason I'm getting an index out of range error which can only be explained by the xpath not returning anything but... how can this be??
+
+And this goes into why I said "can" earlier, which is that, when Twitter (or many other modern sites) give you a webpage, they don't give you a complete webpage. Whatever's left from the page is either retrieved from another request (e.g. a social media feed) or from some CDN that requires the browser to retrieve content itself. However, in this case, this would only prevent us from obtaining all the tweets on a profile because we can't "scroll down".
+
+The likely situation at hand is that the browser I'm using renders and fills in some html to result in the above xpath which is different from what the python code obtains. But xpath is very nice because we don't need to describe a certain path but, instead, we can describe a certain collection of nodes or elements.
+
+So, to approach this, we need to be able to identify a tweet from the html and then dig in to get the text from it. Well, that's not very difficult if we look at the specific identifiers in a tweet `<li>`
+
+![](images/data_item_type.png)
