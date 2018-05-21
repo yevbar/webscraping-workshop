@@ -22,15 +22,43 @@ Starting simple, we're going to put together a script that obtains the first par
 
 [![imports](images/imports.png)](https://repl.it/@yevbar/Web-Scraping-Imports)
 
-```python
-import requests
-from lxml import html
-```
-
-The `requests` library (api?) is what we'll use to handle the making requests and the `html` library is how we'll treat the html as a data structure rather than some plain text.
+The `requests` library is what we'll use to handle the making requests and the `html` library is how we'll treat the html as a data structure rather than plain text.
 
 Before we go about making requests, we should check to see what we're scraping for specifically. To do that, let's go to some Wikipedia article, here I'm going to the page on memes.
 
-<<insert screenshot here>>
+![](images/wikipedia.png)
 
-And what we want to obtain is this first paragraph, which sort of act as a TL;DR for the entire topic.
+What we want to obtain is this first paragraph, which sort of acts as a TL;DR for the entire topic. Opening up inspect element and hovering over a particular p tag highlights the section around that first paragraph which means we've found the specfic element we're looking for!
+
+![](images/p_tag.png)
+
+By pressing the arrows to the left of the tags, we can see this tree like structure of the whole paragraph
+
+![](images/tree_like.png)
+
+We don't need to stress over the specific tags and such in the paragraph, those are mostly for the citations. To get the text, we simply get the `text` value of the element. But to get the element in the first place, we're going to use `xpath` to navigate the XML (which in this case is the HTML) of the file, and is why we imported the `html` library earlier.
+
+Now to get working!
+
+[insert screenshot of repl here]
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+```
+
+The first thing we're going to do is initialize a `session` object. While you could simply call the function from that class, it helps with readability and a session is needed for more elaborate web scraping.
+
+[insert screenshot of repl here]
+
+```python
+import requests
+from lxml import html
+
+my_session = requests.session()
+page = my_session.get("https://en.wikipedia.org/wiki/Meme")
+```
+
+Now we've
